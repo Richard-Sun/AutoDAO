@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yonyou.form_relation.dao.RelationItemDao">
+
+    <resultMap id="BaseResultMap" type="com.yonyou.form_relation.entity.RelationItem">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="tenant_id" property="tenantId" jdbcType="VARCHAR"/>
+
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="describe" property="describe" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+
+        <result column="relation_count" property="relationCount" jdbcType="INTEGER"/>
+        <result column="push_count" property="pushCount" jdbcType="INTEGER"/>
+        <result column="timing_count" property="timingCount" jdbcType="INTEGER"/>
+        <result column="condition_count" property="conditionCount" jdbcType="INTEGER"/>
+
+        <result column="status" property="status" jdbcType="TINYINT"/>
+
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        *
+    </sql>
+
+    <delete id="deleteById">
+        delete from relation_item
+        where id = #{id}
+    </delete>
+
+    <select id="getByTenantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from relation_item
+        where tenant_id = #{tenantId} order by create_time desc limit #{start}, #{size}
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from relation_item
+    </select>
+
+
+    <select id="countByTenantId" resultType="java.lang.Integer">
+        select  count(id)
+        from relation_item
+        where tenant_id = #{tenantId}
+    </select>
+
+
+    <select id="search" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from relation_item
+        <where>
+            <if test="key != null">
+                ( `name` like concat('%', '#', #{key}, '%') escape '#' or user_name like concat('%', '#', #{key}, '%')
+                escape '#' )
+            </if>
+
+            <if test="true">
+                and tenant_id = #{tenantId} order by create_time desc limit #{start}, #{size}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(id)
+        from relation_item
+        <where>
+            <if test="key != null">
+                ( `name` like concat('%', '#', #{key}, '%') escape '#' or user_name like concat('%', '#', #{key}, '%')
+                escape '#' )
+            </if>
+
+            <if test="true">
+                and tenant_id = #{tenantId}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from relation_item
+        where id = #{id}
+    </select>
+
+    <select id="getCountByTenantIdAndName" resultType="java.lang.Integer">
+        select
+        count(id)
+        from relation_item
+        where tenant_id = #{tenantId} and `name` = #{name}
+    </select>
+
+    <select id="getCountByTenantIdAndNameAndId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from relation_item
+        where tenant_id = #{tenantId} and `name` = #{name} and `id` != #{id}
+    </select>
+
+
+    <insert id="insert" parameterType="com.yonyou.form_relation.entity.RelationItem">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+            select UUID()
+        </selectKey>
+
+        insert into relation_item (id,  user_id, user_name, tenant_id, `name`,`describe`, content,
+        relation_count, push_count, timing_count, condition_count, status)
+        values (#{id}, #{userId}, #{userName}, #{tenantId}, #{name},#{describe},#{content},
+        #{relationCount}, #{pushCount}, #{timingCount}, #{conditionCount}, #{status})
+
+    </insert>
+
+    <update id="update" parameterType="com.yonyou.form_relation.entity.RelationItem">
+        update relation_item
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+
+            <if test="describe != null">
+                `describe` = #{describe},
+            </if>
+
+            <if test="content != null">
+                `content` = #{content},
+            </if>
+
+            <if test="relationCount != null">
+                relation_count = #{relationCount},
+            </if>
+
+            <if test="pushCount != null">
+                push_count = #{pushCount},
+            </if>
+
+            <if test="timingCount != null">
+                timing_count = #{timingCount},
+            </if>
+
+            <if test="conditionCount != null">
+                condition_count = #{conditionCount},
+            </if>
+
+            <if test="status != null">
+                status = #{status},
+            </if>
+
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

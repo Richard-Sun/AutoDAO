@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yonyou.form_relation.dao.DataItemDao">
+
+    <resultMap id="BaseResultMap" type="com.yonyou.form_relation.entity.DataItem">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="rule_item_id" property="ruleItemId" jdbcType="VARCHAR"/>
+
+        <result column="target_field_id" property="targetFieldId" jdbcType="VARCHAR"/>
+        <result column="target_field_name" property="targetFieldName" jdbcType="VARCHAR"/>
+        <result column="target_field_type" property="targetFieldType" jdbcType="INTEGER"/>
+        <result column="target_sub_form_id" property="targetSubFormId" jdbcType="VARCHAR"/>
+        <result column="target_sub_form_name" property="targetSubFormName" jdbcType="VARCHAR"/>
+
+        <result column="data_operation_type" property="dataOperationType" jdbcType="TINYINT"/>
+
+        <result column="data_rule_type" property="dataRuleType" jdbcType="TINYINT"/>
+
+        <result column="is_for_update" property="isForUpdate" jdbcType="TINYINT"/>
+        <result column="is_required" property="isRequired" jdbcType="TINYINT"/>
+
+        <result column="source_field_id" property="sourceFieldId" jdbcType="VARCHAR"/>
+        <result column="source_field_name" property="sourceFieldName" jdbcType="VARCHAR"/>
+        <result column="source_field_type" property="sourceFieldType" jdbcType="INTEGER"/>
+        <result column="source_sub_form_id" property="sourceSubFormId" jdbcType="VARCHAR"/>
+        <result column="source_sub_form_name" property="sourceSubFormName" jdbcType="VARCHAR"/>
+
+        <result column="default_value" property="defaultValue" jdbcType="VARCHAR"/>
+        <result column="expression" property="expression" jdbcType="VARCHAR"/>
+        <result column="expression_display" property="expressionDisplay" jdbcType="VARCHAR"/>
+
+        <result column="order" property="order" jdbcType="INTEGER"/>
+
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        *
+    </sql>
+
+    <delete id="deleteById">
+        delete from data_item
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteAllByRuleItemId">
+        delete from data_item
+        where rule_item_id = #{ruleItemId}
+    </delete>
+
+    <select id="getByRuleItemId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from data_item
+        where rule_item_id = #{ruleItemId} order by `order`
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from data_item
+        where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.yonyou.form_relation.entity.DataItem">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+            select UUID()
+        </selectKey>
+        insert into data_item (id, rule_item_id, target_field_id, target_field_name, data_operation_type,
+        data_rule_type, source_field_id, source_field_name,default_value, expression, expression_display, is_for_update,
+        is_required,target_field_type,source_field_type,`order`,
+        source_sub_form_id,source_sub_form_name,target_sub_form_id,target_sub_form_name)
+        values (#{id}, #{ruleItemId}, #{targetFieldId}, #{targetFieldName}, #{dataOperationType},
+        #{dataRuleType},#{sourceFieldId},#{sourceFieldName},#{defaultValue}, #{expression},#{expressionDisplay},#{isForUpdate},
+        #{isRequired},#{targetFieldType},#{sourceFieldType},#{order},
+        #{sourceSubFormId},#{sourceSubFormName},#{targetSubFormId},#{targetSubFormName})
+
+    </insert>
+
+    <update id="update" parameterType="com.yonyou.form_relation.entity.DataItem">
+        update data_item
+        <set>
+            <if test="targetFieldId != null">
+                target_field_id = #{targetFieldId},
+            </if>
+
+            <if test="targetFieldName != null">
+                target_field_name = #{targetFieldName},
+            </if>
+
+            <if test="dataOperationType != null">
+                data_operation_type = #{dataOperationType},
+            </if>
+
+            <if test="order != null">
+                `order` = #{order},
+            </if>
+
+            <if test="dataRuleType != null">
+                data_rule_type = #{dataRuleType},
+            </if>
+
+            <if test="sourceFieldId != null">
+                source_field_id = #{sourceFieldId},
+            </if>
+
+            <if test="sourceFieldName != null">
+                source_field_name = #{sourceFieldName},
+            </if>
+
+            <if test="sourceSubFormId != null">
+                source_sub_form_id = #{sourceSubFormId},
+            </if>
+
+            <if test="sourceSubFormName != null">
+                source_sub_form_name = #{sourceSubFormName},
+            </if>
+
+            <if test="targetSubFormId != null">
+                target_sub_form_id = #{targetSubFormId},
+            </if>
+
+            <if test="targetSubFormName != null">
+                target_sub_form_name = #{targetSubFormName},
+            </if>
+
+
+            <if test="defaultValue != null">
+                default_value = #{defaultValue},
+            </if>
+
+            <if test="expression != null">
+                expression = #{expression},
+            </if>
+
+            <if test="expressionDisplay != null">
+                expression_display = #{expressionDisplay},
+            </if>
+
+            <if test="isForUpdate != null">
+                is_for_update = #{isForUpdate},
+            </if>
+            <if test="isRequired != null">
+                is_required = #{isRequired},
+            </if>
+
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+
+            <if test="targetFieldType != null">
+                target_field_type = #{targetFieldType},
+            </if>
+
+            <if test="sourceFieldType != null">
+                source_field_type = #{sourceFieldType},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
