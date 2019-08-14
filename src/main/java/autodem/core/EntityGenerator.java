@@ -1,4 +1,6 @@
-package autodao.core;
+package autodem.core;
+
+import autodem.util.AutoUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,14 +10,18 @@ import java.io.IOException;
 public class EntityGenerator implements Generator {
 
     private SqlReader sqlReader;
+    private String packageName;
+    private String entityPath;
 
     public EntityGenerator(SqlReader sqlReader) {
         this.sqlReader = sqlReader;
+        this.entityPath = AutoUtil.searchPath(sqlReader.projectPath, "entity");
+        this.packageName = AutoUtil.getPackageName(entityPath);
     }
 
     public void generate() {
-        File file = new File(sqlReader.path + sqlReader.table.getTableName() + ".java");
-        if (!file.exists()) {
+        File file = new File(entityPath + "\\" + sqlReader.table.getTableName() + ".java");
+        if(!file.exists()){
             try {
                 file.createNewFile();
                 write(file);
@@ -23,19 +29,25 @@ public class EntityGenerator implements Generator {
                 e.printStackTrace();
             }
         }
+
     }
 
     private void write(File file) throws IOException {
         FileWriter fileWriter = new FileWriter(file);
         BufferedWriter writer = new BufferedWriter(fileWriter);
-        writer.write("import lombok.Data;");
+        writer.write("package " + packageName + ";\n");
+        writer.newLine();
+        writer.write("import lombok.Data;\n");
+        writer.newLine();
+        writer.write("import java.util.Date;\n");
         writer.newLine();
         writer.write("@Data");
         writer.newLine();
-        writer.write("public class " + sqlReader.table.getTableName() + "{");
+        writer.write("public class " + sqlReader.table.getTableName() + " {");
+        writer.newLine();
         writer.newLine();
         for (int i = 0; i < sqlReader.table.length(); i++) {
-            writer.write("  private " +
+            writer.write("    private " +
                     sqlReader.table.getColumns().get(i).getColumnType() + " " +
                     sqlReader.table.getColumns().get(i).getColumnName() + ";"
             );
@@ -46,5 +58,6 @@ public class EntityGenerator implements Generator {
         writer.flush();
         fileWriter.close();
     }
+
 
 }
