@@ -19,17 +19,21 @@ public class EntityGenerator implements Generator {
         this.packageName = AutoUtil.getPackageName(entityPath);
     }
 
-    public void generate() {
+    public boolean generate() {
+        if ("".equals(sqlReader.table.getTableName()) || sqlReader.table.getTableName() == null) {
+            return false;
+        }
         File file = new File(entityPath + "\\" + sqlReader.table.getTableName() + ".java");
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
                 write(file);
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
         }
-
+        return true;
     }
 
     private void write(File file) throws IOException {

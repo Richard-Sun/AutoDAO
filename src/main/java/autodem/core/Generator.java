@@ -1,5 +1,5 @@
 package autodem.core;
 
 public interface Generator {
-    void generate();
+    boolean generate();
 }

@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="AutoDAO:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AutoDAO_jar</output-path>
+    <root id="root">
+      <element id="archive" name="AutoDAO.jar">
+        <element id="module-output" name="AutoDAO" />
+      </element>
+    </root>
+  </artifact>
+</component>

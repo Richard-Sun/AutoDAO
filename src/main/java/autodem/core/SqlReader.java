@@ -15,24 +15,22 @@ public class SqlReader {
     public String projectPath;
     public TableStructure table = new TableStructure();
 
-    public SqlReader(String sqlPath) {
+    public SqlReader(String sqlPath, String projectPath) {
         readSql(sqlPath);
-        this.projectPath = setProjectPath(sqlPath); //结尾不带\
+        setProjectPath(projectPath); //结尾不带\
     }
 
-    private String setProjectPath(String path) {
-        String filePath = "";
-        String[] paths = path.split("\\\\");
-        for (int i = 0; i < paths.length; i++) {
-            if (i != paths.length - 1) {
-                filePath = filePath + paths[i] + "\\";
-            }
-        }
-        return filePath;
+    private void setProjectPath(String path) {
+        this.projectPath = path;
     }
 
     private void readSql(String path) {
         File file = new File(path);
+        if (!file.getName().contains(".sql")) {
+            table.setTableName("");
+            table.setDatabaseTableName("");
+            return;
+        }
         try {
             String line = null;
             FileReader fileReader = new FileReader(file);

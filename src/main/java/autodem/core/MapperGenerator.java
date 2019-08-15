@@ -27,7 +27,10 @@ public class MapperGenerator implements Generator {
 
     }
 
-    public void generate() {
+    public boolean generate() {
+        if ("".equals(sqlReader.table.getTableName()) || sqlReader.table.getTableName() == null) {
+            return false;
+        }
         File file = new File(this.mapperPath + "\\" + sqlReader.table.getTableName() + "Mapper.xml");
         if(!file.exists()){
             try {
@@ -35,8 +38,10 @@ public class MapperGenerator implements Generator {
                 write(file);
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
         }
+        return true;
     }
 
     private void write(File file) throws IOException {
