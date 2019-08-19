@@ -27,9 +27,9 @@ public class MyFrame extends JFrame {
         f.setLocationRelativeTo(null);
         f.add(p);
         setLabel();
-        f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setButton();
+        f.setVisible(true);
     }
 
     private void setLabel() {

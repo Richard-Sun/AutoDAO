@@ -40,6 +40,7 @@ public class startClass implements ActionListener {
                 }
             }
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
         label.setText("Failed!");
         return;
